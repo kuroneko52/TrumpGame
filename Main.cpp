@@ -4,56 +4,52 @@
 
 using namespace std;
 
-int sum(int a, int b)
-{
-	return (a + b);
+int sum(int a, int b) {
+    return a + b;
 }
 
-int Total(int a, int b, int c, int d)
-{
-	return sum(a, b) + sum(c, d);
+int totalScore(int a, int b, int c, int d) {
+    return sum(a, b) + sum(c, d);
 }
 
-void ShowResult(int alice, int bob, int total, int& a, int& b)
-{
-	if (total < 4 || 52 < total)
-	{
-		cout << "error" << endl;
-	}
-	else if (alice == bob)
-	{
-		cout << "draw" << endl;
-	}
-	else if (alice > bob)
-	{
-		cout << "alice win" << endl;
-		a++;
-	}
-	else if (alice < bob)
-	{
-		cout << "bob win" << endl;
-		b++;
-	}
+void showResult(int aliceScore, int bobScore, int& aliceWins, int& bobWins) {
+    if (aliceScore == bobScore) {
+        cout << "draw" << endl;
+    } else if (aliceScore > bobScore) {
+        cout << "alice win" << endl;
+        aliceWins++;
+    } else {
+        cout << "bob win" << endl;
+        bobWins++;
+    }
 }
 
-int main()
-{
-	int a, b, c, d, total = 0, alice = 0, bob = 0;
-	cin >> a >> b;
-	cin >> c >> d;
+bool isValidTotal(int total) {
+    return total >= 4 && total <= 52;
+}
 
-	total = Total(a, b, c, d);
+void processGame(int& aliceWins, int& bobWins) {
+    int a, b, c, d;
+    while (true) {
+        cin >> a >> b >> c >> d;
+        int total = totalScore(a, b, c, d);
 
-	while (total != 0)
-	{
-		ShowResult(sum(a, b), sum(c, d), total, alice, bob);
+        if (total == 0) {
+            break;
+        }
 
-		cin >> a >> b;
-		cin >> c >> d;
-		total = Total(a, b, c, d);
-	}
+        if (!isValidTotal(total)) {
+            cout << "error" << endl;
+            continue;
+        }
 
-	cout << "awc " << alice << " bwc " << bob << endl;
+        showResult(sum(a, b), sum(c, d), aliceWins, bobWins);
+    }
+}
 
-	return 0;
+int main() {
+    int aliceWins = 0, bobWins = 0;
+    processGame(aliceWins, bobWins);
+    cout << "awc " << aliceWins << " bwc " << bobWins << endl;
+    return 0;
 }
